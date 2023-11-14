@@ -6,20 +6,16 @@ import { nanoid } from 'nanoid';
 import { StyledTitle } from './Filter/Filter.styled';
 
 export const App = props => {
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState(() => {
+    const storageContacts = localStorage.getItem('contacts');
+    if (storageContacts !== null) {
+      return JSON.parse(storageContacts);
+    }
+    return [];
+  });
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
-    const storageContacts = localStorage.getItem('contacts');
-    if (storageContacts !== null) {
-      setContacts(JSON.parse(storageContacts));
-    }
-  }, []);
-
-  useEffect(() => {
-    if (contacts.length === 0) {
-      return;
-    }
     localStorage.setItem('contacts', JSON.stringify(contacts));
   }, [contacts]);
 
